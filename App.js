@@ -3,7 +3,7 @@ import { ScrollView, View, Text, TextInput, TouchableOpacity, StyleSheet } from 
 import { useForm, Controller } from "react-hook-form"
 
 const App = () => {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, watch, formState: { errors } } = useForm();
   
   const onSubmit = (data) => {
     console.log(data);
@@ -27,7 +27,11 @@ const App = () => {
             />
           )}
           name="firstname"
+          rules={{
+            required: 'Firstname is required'
+          }}
         />
+        {errors.firstname && <Text style={styles.errorMsgStyle}>{errors.firstname.message}</Text>}
 
         <Controller
           control={control}
@@ -43,7 +47,11 @@ const App = () => {
             />
           )}
           name="lastname"
+          rules={{
+            required: 'Lastname is required'
+          }}
         />
+        {errors.lastname && <Text style={styles.errorMsgStyle}>{errors.lastname.message}</Text>}
 
         <Controller
           control={control}
@@ -59,7 +67,12 @@ const App = () => {
             />
           )}
           name="email"
+          rules={{
+            required: 'Email is required',
+            pattern: { value: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-zA-Z0-9.-]$/, message: 'Invalid email' }
+          }}
         />
+        {errors.email && <Text style={styles.errorMsgStyle}>{errors.email.message}</Text>}
 
         <Controller
           control={control}
@@ -76,7 +89,12 @@ const App = () => {
             />
           )}
           name="phone_number"
+          rules={{
+            required: 'Phone Number is required',
+            pattern: { value: /^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/, message: "Invalid phone number" }
+          }}
         />
+        {errors.phone_number && <Text style={styles.errorMsgStyle}>{errors.phone_number.message}</Text>}
 
         <Controller
           control={control}
@@ -93,7 +111,14 @@ const App = () => {
             />
           )}
           name="password"
+          rules={{
+            required: 'Password is required',
+            minLength: { value: 8, message: 'Password must be atleast 8 charecters' },
+            maxLength: { value: 32, message: 'Password must not have more than 32 charecters' },
+            pattern: { value: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[*#!@$%^&]).{8,32}$/, message: 'Password must contain atleast 1 uppercase, 1 lowercase, 1 special character(!@#$%^&*) and 1 digit' }
+          }}
         />
+        {errors.password && <Text style={styles.errorMsgStyle}>{errors.password.message} </Text>}
 
         <Controller
           control={control}
@@ -110,9 +135,15 @@ const App = () => {
             />
           )}
           name="confirm_password"
+          rules={{
+            required: 'Confirm Password is required',
+            validate: (value) => value === watch('password') || "Passwords does not match"
+          }}
         />
+        {errors.confirm_password && <Text style={styles.errorMsgStyle}>{errors.confirm_password.message} </Text>}
+
         <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onSubmit)}>
-          <Text styles={{ color: '#FFFFFF', fontSize: 16 }}>Register</Text>
+          <Text styles={{ color: '#FFFFFF', fontSize: 16 }}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
