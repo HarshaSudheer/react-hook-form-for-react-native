@@ -4,7 +4,11 @@ import { useForm, Controller } from "react-hook-form"
 
 const App = () => {
   const { control, handleSubmit } = useForm();
-
+  
+  const onSubmit = (data) => {
+    console.log(data);
+  }
+  
   return (
     <ScrollView style={styles.containerStyle}>
       <Text style={styles.textStyle}>Register Form</Text>
@@ -107,6 +111,9 @@ const App = () => {
           )}
           name="confirm_password"
         />
+        <TouchableOpacity style={styles.buttonStyle} onPress={handleSubmit(onSubmit)}>
+          <Text styles={{ color: '#FFFFFF', fontSize: 16 }}>Register</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
